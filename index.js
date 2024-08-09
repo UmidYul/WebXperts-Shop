@@ -43,8 +43,7 @@ app.post("/logUp_api", async (req, res) => {
     const { name, email, password } = req.body
     try {
         if (users.find(user => user.email === email)) {
-            AlertMessage(404, "Такой Пользователь Уже Существует!")
-            console.log("Такой Пользователь Уже Существует!")
+            AlertMessage(404, "Use another email!")
         } else {
             const salt = await bcrypt.genSalt()
             const HashedPassword = await bcrypt.hash(password, salt)
@@ -62,13 +61,13 @@ app.post("/logIn_api", async (req, res) => {
     const { email, password } = req.body
     const user = users.find(user => user.email === email)
     if (!user) {
-        AlertMessage(404, "Такого Пользователя Не Существует!")
+        AlertMessage(404, "Authentication is failed!")
     } else {
         try {
             if (await bcrypt.compare(password, user.password)) {
-                AlertMessage(200, "Вы Успешно Зарегистрировались!")
+                AlertMessage(200, "Successfully Authenticated!")
             } else {
-                AlertMessage(404, "Вы Ввели Не Верный Пароль!")
+                AlertMessage(404, "Authentication is failed!")
             }
         } catch (error) {
             console.log(error);
